@@ -1,11 +1,15 @@
 package br.com.jdbc;
 
+import java.math.BigDecimal;
+
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import br.com.jdbc.persistence.BeneficioDAO;
 import br.com.jdbc.persistence.ColaboradorDAO;
 import br.com.jdbc.persistence.ContatoDAO;
+import br.com.jdbc.persistence.entity.Beneficio;
 import br.com.jdbc.persistence.entity.Colaborador;
 import br.com.jdbc.persistence.entity.Contato;
 
@@ -15,6 +19,7 @@ public class Main implements CommandLineRunner {
 	
 	private final ColaboradorDAO colaboradorDAO = new ColaboradorDAO();
 	private final ContatoDAO contatoDAO = new ContatoDAO();
+	private final BeneficioDAO beneficioDAO = new BeneficioDAO();
 	
 	
 	@Override
@@ -27,7 +32,7 @@ public class Main implements CommandLineRunner {
 		
 		
 		
-		var colaborador = new Colaborador();
+		/*var colaborador = new Colaborador();
 		colaborador.setNome("Ricarlos");
 		colaborador.setMatricula("0001");
 		System.out.println("Colaborador ANTES do insert: "+colaborador);
@@ -45,9 +50,34 @@ public class Main implements CommandLineRunner {
 		System.out.println("Contato DEPOIS do insert: "+contato);
 		
 		System.out.println("****************************************************");
-		System.out.println("Consultando Colaborador por Codigo");
 		
-		System.out.println(colaboradorDAO.findById(colaborador.getId()));
+		
+		
+		var beneficioPlanoSaude = new Beneficio();
+		beneficioPlanoSaude.setDescricao("Plano Bradesco Saude");
+		beneficioPlanoSaude.setDescontoColaborador(new BigDecimal(0));
+		beneficioPlanoSaude.setColaborador(colaborador);
+		System.out.println("Beneficio ANTES do insert: "+beneficioPlanoSaude);
+		beneficioDAO.insert(beneficioPlanoSaude);
+		System.out.println("Beneficio DEPOIS do insert: "+beneficioPlanoSaude);
+		
+		System.out.println("****************************************************");
+		
+		
+		var beneficioPlanoOdontologico = new Beneficio();
+		beneficioPlanoOdontologico.setDescricao("Plano UniOdonto");
+		beneficioPlanoOdontologico.setDescontoColaborador(new BigDecimal(30));
+		beneficioPlanoOdontologico.setColaborador(colaborador);
+		System.out.println("Beneficio ANTES do insert: "+beneficioPlanoOdontologico);
+		beneficioDAO.insert(beneficioPlanoOdontologico);
+		System.out.println("Beneficio DEPOIS do insert: "+beneficioPlanoOdontologico);
+		
+		System.out.println("****************************************************");*/
+		
+		
+		
+		System.out.println("Consultando Colaborador por Codigo");
+		System.out.println(colaboradorDAO.findByIdWithBeneficios(16L));
 		
 		
 		/*System.out.println("Consultando todos os colaboradores");

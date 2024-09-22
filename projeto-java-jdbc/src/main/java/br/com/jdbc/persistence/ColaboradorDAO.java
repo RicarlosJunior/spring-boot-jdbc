@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import com.mysql.cj.jdbc.StatementImpl;
 
+import br.com.jdbc.persistence.entity.Beneficio;
 import br.com.jdbc.persistence.entity.Colaborador;
 import br.com.jdbc.persistence.entity.Contato;
 
@@ -153,6 +154,59 @@ public class ColaboradorDAO {
 		return colaborador;
 	}
 
+	//METODO PARA ESTUDO 
+	//COLABORADOR 1 PARA 1 COM CONTATO
+	//COLABORADOR 1 PARA N COM BENEFICIO (POR ISSO O DO WHILE)
+	public Colaborador findByIdWithBeneficios(final Long id) {
+		
+		Colaborador colaborador = new Colaborador();
+		var sql = " SELECT c.id, c.nome, c.matricula, ct.id contato_id, ct.tipo, ct.descricao, bf.id beneficio_id, bf.descricao descricao_beneficio, bf.desconto_colaborador "
+				+ " FROM colaborador c"
+				+ " INNER JOIN contato ct ON (c.id = ct.colaborador_id) "
+				+ " INNER JOIN beneficio bf ON (c.id = bf.colaborador_id) "
+				+ " WHERE c.id = ?";
+		
+		//CODIGO PARA DESENVOLVIMENTO
+		var sqlDebug = sql.replaceFirst("\\?", String.valueOf(id));
+		System.out.println("SQL: " + sqlDebug);
+		
+		try (var connection = ConnectionUtil.getConnection(); 
+			 var prepareStatement = connection.prepareStatement(sql);
+		 ) {
+			
+			prepareStatement.setLong(1, id);
+			
+			var resultSet = prepareStatement.executeQuery();
+			
+			if (resultSet.next()) {
+				
+				colaborador.setId(resultSet.getLong("id"));
+				colaborador.setNome(resultSet.getString("nome"));
+				colaborador.setMatricula(resultSet.getString("matricula"));
+				colaborador.setContato(new Contato());
+				colaborador.getContato().setId(resultSet.getLong("contato_id"));
+				colaborador.getContato().setTipo(resultSet.getString("tipo"));
+				colaborador.getContato().setDescricao(resultSet.getString("descricao"));
+				colaborador.setBeneficios(new ArrayList<>());
+				
+				do {
+					
+					var beneficio = new Beneficio();
+					beneficio.setId(resultSet.getLong("beneficio_id"));
+					beneficio.setDescricao(resultSet.getString("descricao_beneficio"));
+					beneficio.setDescontoColaborador(resultSet.getBigDecimal("desconto_colaborador"));
+					colaborador.getBeneficios().add(beneficio);
+					
+				} while (resultSet.next());
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return colaborador;
+	}
+	
+	
 	public List<Colaborador> findAll() {
 		
 		List<Colaborador> colaboradores = new ArrayList<>();
