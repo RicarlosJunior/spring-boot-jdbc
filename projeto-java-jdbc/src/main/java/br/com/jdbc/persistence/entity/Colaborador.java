@@ -9,6 +9,7 @@ public class Colaborador {
 	private String matricula;
 	private Contato contato;
 	private List<Beneficio> beneficios;
+	private List<ModuloSistema> modulos;
 	
 	public Long getId() {
 		return id;
@@ -41,9 +42,17 @@ public class Colaborador {
 	public void setBeneficios(List<Beneficio> beneficios) {
 		this.beneficios = beneficios;
 	}
-	@Override
-	public String toString() {
-		return "Colaborador [id=" + id + ", nome=" + nome + ", matricula=" + matricula + ", contato=" + contato+ ", beneficios=" + beneficios + "]";
+	public List<ModuloSistema> getModulos() {
+		return modulos;
+	}
+	public void setModulos(List<ModuloSistema> modulos) {
+		this.modulos = modulos;
 	}
 	
+	@Override
+	public String toString() {
+		return "Colaborador [id=" + id + ", nome=" + nome + ", matricula=" + matricula + ", contato=" + contato
+				+ ", beneficios=" + beneficios + ", modulos=" + modulos + "]";
+	}
+
 }

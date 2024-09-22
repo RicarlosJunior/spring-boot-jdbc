@@ -10,9 +10,12 @@ import com.mysql.cj.jdbc.StatementImpl;
 import br.com.jdbc.persistence.entity.Beneficio;
 import br.com.jdbc.persistence.entity.Colaborador;
 import br.com.jdbc.persistence.entity.Contato;
+import br.com.jdbc.persistence.entity.ModuloSistema;
 
 public class ColaboradorDAO {
 
+	private final ColaboradorModuloSistemaDAO colaboradorModuloSistemaDAO = new ColaboradorModuloSistemaDAO();
+	
 	public void insert(final Colaborador colaborador) {
 		
 		var sql = "INSERT INTO colaborador (nome, matricula) VALUES (?, ?)";
@@ -40,6 +43,39 @@ public class ColaboradorDAO {
 		}
 	}
 
+	public void insertWithModuloSistema(final Colaborador colaborador) {
+		
+		var sql = "INSERT INTO colaborador (nome, matricula) VALUES (?, ?)";
+		
+		//CODIGO PARA DESENVOLVIMENTO
+		var sqlDebug = sql.replaceFirst("\\?", "'" + colaborador.getNome() + "'")
+          	  			  .replaceFirst("\\?", "'" + colaborador.getMatricula()+ "'");
+		System.out.println("SQL: " + sqlDebug);
+		
+		try (var connection = ConnectionUtil.getConnection(); 
+			 var prepareStatement = connection.prepareStatement(sql);
+		) {
+
+				prepareStatement.setString(1, colaborador.getNome());
+				prepareStatement.setString(2, colaborador.getMatricula());
+				
+				prepareStatement.executeUpdate();
+				
+				//PEGANDO O ID INSERIDO NO BANCO
+				if(prepareStatement instanceof StatementImpl impl) {
+					colaborador.setId(impl.getLastInsertID());
+				}
+				
+				colaborador.getModulos().stream().map(ModuloSistema::getId)
+												.forEach(moduloId -> colaboradorModuloSistemaDAO.insert(colaborador.getId(), moduloId));
+				
+				
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public void insertWithProcedure(final Colaborador colaborador) {
 		

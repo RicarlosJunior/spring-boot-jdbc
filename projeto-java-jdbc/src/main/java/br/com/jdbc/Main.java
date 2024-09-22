@@ -1,6 +1,7 @@
 package br.com.jdbc;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.CommandLineRunner;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Component;
 import br.com.jdbc.persistence.BeneficioDAO;
 import br.com.jdbc.persistence.ColaboradorDAO;
 import br.com.jdbc.persistence.ContatoDAO;
+import br.com.jdbc.persistence.ModuloSistemaDAO;
 import br.com.jdbc.persistence.entity.Beneficio;
 import br.com.jdbc.persistence.entity.Colaborador;
 import br.com.jdbc.persistence.entity.Contato;
+import br.com.jdbc.persistence.entity.ModuloSistema;
 
 @Component
 public class Main implements CommandLineRunner {
@@ -20,6 +23,7 @@ public class Main implements CommandLineRunner {
 	private final ColaboradorDAO colaboradorDAO = new ColaboradorDAO();
 	private final ContatoDAO contatoDAO = new ContatoDAO();
 	private final BeneficioDAO beneficioDAO = new BeneficioDAO();
+	private final ModuloSistemaDAO moduloSistemaDAO = new ModuloSistemaDAO();
 	
 	
 	@Override
@@ -31,13 +35,40 @@ public class Main implements CommandLineRunner {
 		flyway.migrate();
 		
 		
+	/*	
+		var moduloSistemaTI = new ModuloSistema();
+		moduloSistemaTI.setNome("TI");
+		moduloSistemaDAO.insert(moduloSistemaTI);
+		
+		var moduloSistemaContabilidade = new ModuloSistema();
+		moduloSistemaContabilidade.setNome("Contabilidade");
+		moduloSistemaDAO.insert(moduloSistemaContabilidade);
+		
+		var moduloSistemaVendas = new ModuloSistema();
+		moduloSistemaVendas.setNome("Vendas");
+		moduloSistemaDAO.insert(moduloSistemaVendas);
+		
+		
+		var colaborador = new Colaborador();
+		colaborador.setNome("Ricarlos");
+		colaborador.setMatricula("0001");
+		
+		colaborador.setModulos(new ArrayList<>());
+		
+		
+		colaborador.getModulos().add(moduloSistemaTI);
+		colaborador.getModulos().add(moduloSistemaContabilidade);
+		colaborador.getModulos().add(moduloSistemaVendas);
+		
+		colaboradorDAO.insertWithModuloSistema(colaborador);
+		
+		/*
+		
 		
 		/*var colaborador = new Colaborador();
 		colaborador.setNome("Ricarlos");
 		colaborador.setMatricula("0001");
-		System.out.println("Colaborador ANTES do insert: "+colaborador);
 		colaboradorDAO.insert(colaborador);
-		System.out.println("Colaborador DEPOIS do insert: "+colaborador);
 		
 		System.out.println("****************************************************");
 		
@@ -45,9 +76,7 @@ public class Main implements CommandLineRunner {
 		contato.setTipo("email");
 		contato.setDescricao("ricarlosjr@hotmail.com");
 		contato.setColaborador(colaborador);
-		System.out.println("Contato ANTES do insert: "+contato);
 		contatoDAO.insert(contato);
-		System.out.println("Contato DEPOIS do insert: "+contato);
 		
 		System.out.println("****************************************************");
 		
@@ -57,57 +86,20 @@ public class Main implements CommandLineRunner {
 		beneficioPlanoSaude.setDescricao("Plano Bradesco Saude");
 		beneficioPlanoSaude.setDescontoColaborador(new BigDecimal(0));
 		beneficioPlanoSaude.setColaborador(colaborador);
-		System.out.println("Beneficio ANTES do insert: "+beneficioPlanoSaude);
 		beneficioDAO.insert(beneficioPlanoSaude);
-		System.out.println("Beneficio DEPOIS do insert: "+beneficioPlanoSaude);
 		
-		System.out.println("****************************************************");
 		
 		
 		var beneficioPlanoOdontologico = new Beneficio();
 		beneficioPlanoOdontologico.setDescricao("Plano UniOdonto");
 		beneficioPlanoOdontologico.setDescontoColaborador(new BigDecimal(30));
 		beneficioPlanoOdontologico.setColaborador(colaborador);
-		System.out.println("Beneficio ANTES do insert: "+beneficioPlanoOdontologico);
 		beneficioDAO.insert(beneficioPlanoOdontologico);
-		System.out.println("Beneficio DEPOIS do insert: "+beneficioPlanoOdontologico);
 		
 		System.out.println("****************************************************");*/
 		
 		
 		
-		System.out.println("Consultando Colaborador por Codigo");
-		System.out.println(colaboradorDAO.findByIdWithBeneficios(16L));
 		
-		
-		/*System.out.println("Consultando todos os colaboradores");
-		System.out.println(colaboradorDAO.findAll());
-		
-		
-		System.out.println("Consultando colaborador com codigo 1");
-		System.out.println(colaboradorDAO.findById(1L));
-		
-		System.out.println("Atualizando colaborador com codigo 2");
-		var colaborador = new Colaborador();
-		colaborador.setId(2L);
-		colaborador.setNome("Fernanda");
-		colaborador.setMatricula("0002");
-		colaboradorDAO.update(colaborador);
-		
-		
-		System.out.println("Atualizando colaborador com codigo 3");
-		colaborador.setId(3L);
-		colaborador.setNome("Cecilia");
-		colaborador.setMatricula("0003");
-		colaboradorDAO.update(colaborador);
-		
-		
-		System.out.println(colaboradorDAO.findAll());
-		
-		
-		System.out.println("Deletando colaborador com codigo 3");
-		colaboradorDAO.delete(3L);
-		
-		System.out.println(colaboradorDAO.findAll());*/
 	}
 }
