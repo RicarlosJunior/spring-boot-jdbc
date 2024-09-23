@@ -35,6 +35,8 @@ public class Main implements CommandLineRunner {
 		flyway.migrate();
 		
 		
+		System.out.println(colaboradorDAO.findByIdFull(17L));
+		
 	/*	
 		var moduloSistemaTI = new ModuloSistema();
 		moduloSistemaTI.setNome("TI");

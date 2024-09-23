@@ -193,7 +193,8 @@ public class ColaboradorDAO {
 	//METODO PARA ESTUDO 
 	//COLABORADOR 1 PARA 1 COM CONTATO
 	//COLABORADOR 1 PARA N COM BENEFICIO (POR ISSO O DO WHILE)
-	public Colaborador findByIdWithBeneficios(final Long id) {
+	//COLABORADOR N PARA N COM MODULO_SISTEMA
+	public Colaborador findByIdFull(final Long id) {
 		
 		Colaborador colaborador = new Colaborador();
 		var sql = " SELECT c.id, c.nome, c.matricula, ct.id contato_id, ct.tipo, ct.descricao, bf.id beneficio_id, bf.descricao descricao_beneficio, bf.desconto_colaborador "
@@ -236,6 +237,9 @@ public class ColaboradorDAO {
 				} while (resultSet.next());
 				
 			}
+			
+			colaborador.setModulos(colaboradorModuloSistemaDAO.findModuloSistemaPorByColaborador(colaborador.getId()));
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
