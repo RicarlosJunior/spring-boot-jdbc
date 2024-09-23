@@ -38,7 +38,7 @@ public class ColaboradorModuloSistemaDAO {
 		}
 	}
  
- public List<ModuloSistema> findModuloSistemaPorByColaborador(final Long colaboradorId) {
+ public List<ModuloSistema> findModuloSistemaByColaborador(final Long colaboradorId) {
 		
 	 	List<ModuloSistema> modulos = new ArrayList<>();
 		var sql = " SELECT DISTINCT ms.id, ms.nome "

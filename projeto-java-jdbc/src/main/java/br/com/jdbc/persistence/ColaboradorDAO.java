@@ -238,7 +238,7 @@ public class ColaboradorDAO {
 				
 			}
 			
-			colaborador.setModulos(colaboradorModuloSistemaDAO.findModuloSistemaPorByColaborador(colaborador.getId()));
+			colaborador.setModulos(colaboradorModuloSistemaDAO.findModuloSistemaByColaborador(colaborador.getId()));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
